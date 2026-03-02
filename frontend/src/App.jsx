@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Link as LinkIcon, Mail, Phone, CheckCircle2, Activity, Users, Shield, Database, LayoutGrid, ChevronRight } from 'lucide-react';
+import { Search, Link as LinkIcon, Mail, Phone, CheckCircle2, Activity, Users, Shield, Database, LayoutGrid, Zap, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster, toast } from 'sonner';
 import clsx from 'clsx';
@@ -41,7 +41,7 @@ function App() {
 
       if (response.ok) {
         setResult(data.contact);
-        toast.success('Identity reconciled successfully!');
+        toast.success('Identity graph resolved!');
       } else {
         toast.error(data.error || "Failed to identify user.");
       }
@@ -52,9 +52,9 @@ function App() {
     }
   };
 
-  const PrimaryList = ({ items, icon: Icon, title }) => {
+  const PrimaryList = ({ items, icon: Icon, title, colorClass }) => {
     if (!items || items.length === 0) return (
-      <div className="flex items-center gap-2 text-slate-400 italic text-sm p-4 border border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+      <div className="flex items-center justify-center gap-2 text-white/40 italic text-sm p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
         <Icon className="w-4 h-4 opacity-50" /> No {title.toLowerCase()} recorded
       </div>
     );
@@ -62,24 +62,32 @@ function App() {
       <div className="space-y-3">
         {items.map((item, idx) => (
           <motion.div
-            initial={{ opacity: 0, x: -10 }}
+            initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: idx * 0.1 }}
+            transition={{ delay: idx * 0.1, type: "spring", stiffness: 100 }}
             key={idx}
-            className="group flex items-center justify-between p-4 rounded-2xl border border-slate-100 bg-white hover:border-indigo-100 hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-300 w-full relative overflow-hidden"
+            className="group flex items-center justify-between p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20 transition-all duration-300 w-full relative overflow-hidden shadow-lg"
           >
-            <div className="absolute inset-y-0 left-0 w-1 bg-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="flex items-center gap-4">
+            {idx === 0 && (
+              <div className={cn("absolute inset-0 opacity-20 bg-gradient-to-r", colorClass)} />
+            )}
+            <div className="flex items-center gap-4 relative z-10">
               <div className={cn(
-                "p-2.5 rounded-xl transition-colors",
-                idx === 0 ? "bg-indigo-50 text-indigo-600" : "bg-slate-50 text-slate-500 group-hover:bg-indigo-50/50 group-hover:text-indigo-500"
+                "p-2.5 rounded-xl transition-colors shadow-inner",
+                idx === 0 ? "bg-white/20 text-white" : "bg-white/5 text-white/60 group-hover:text-white"
               )}>
                 <Icon className="w-4 h-4" />
               </div>
-              <span className="font-semibold text-slate-700">{item}</span>
+              <span className={cn(
+                "font-bold tracking-wide",
+                idx === 0 ? "text-white text-lg" : "text-white/80"
+              )}>{item}</span>
             </div>
             {idx === 0 && (
-              <span className="bg-gradient-to-r from-emerald-500 to-teal-400 text-white text-[10px] uppercase font-bold tracking-widest px-3 py-1.5 rounded-full shadow-sm">
+              <span className={cn(
+                "text-[10px] uppercase font-black tracking-widest px-3 py-1.5 rounded-full shadow-lg border border-white/20 relative z-10 bg-gradient-to-r",
+                colorClass
+              )}>
                 Primary
               </span>
             )}
@@ -90,39 +98,47 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-slate-50 font-sans overflow-hidden selection:bg-indigo-100 selection:text-indigo-900">
-      <Toaster position="top-center" richColors />
+    <div className="flex flex-col lg:flex-row h-screen bg-[#0A0F1C] font-sans overflow-hidden selection:bg-pink-500/30 selection:text-pink-200 text-white">
+      <Toaster position="top-right" richColors theme="dark" />
 
-      {/* Left Sidebar Form */}
-      <div className="w-full lg:w-[460px] h-full flex flex-col border-r border-slate-200/80 bg-white shrink-0 z-20 relative shadow-2xl shadow-slate-200/30 overflow-y-auto">
+      {/* Left Sidebar Form - Dark & Vibrant */}
+      <div className="w-full lg:w-[480px] h-full flex flex-col border-r border-white/10 bg-[#0F1629] shrink-0 z-30 relative shadow-[20px_0_60px_-15px_rgba(0,0,0,0.5)] overflow-y-auto">
+        
+        {/* Subtle top gradient */}
+        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500" />
+
         <div className="p-10 pb-6">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white shadow-inner">
-              <Activity className="w-6 h-6 text-indigo-400" />
+          <div className="flex items-center gap-4 mb-12">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 p-[2px] shadow-lg shadow-purple-500/30 animate-pulse">
+               <div className="w-full h-full bg-[#0F1629] rounded-2xl flex items-center justify-center">
+                  <Activity className="w-7 h-7 text-purple-400" />
+               </div>
             </div>
             <div>
-              <h1 className="font-extrabold text-xl text-slate-900 tracking-tight">FluxKart</h1>
-              <p className="text-xs text-slate-500 font-semibold tracking-widest uppercase mt-0.5">Identity Engine</p>
+              <h1 className="font-black text-3xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 tracking-tight">FluxKart</h1>
+              <p className="text-xs text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 font-black tracking-[0.2em] uppercase mt-1 flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-pink-400" /> Nexus Engine
+              </p>
             </div>
           </div>
 
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Reconcile User</h2>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              Query our graph database to consolidate fragmented touchpoints into a single customer view.
+          <div className="mb-10">
+            <h2 className="text-2xl font-bold tracking-tight text-white mb-3">Target Acquisition</h2>
+            <p className="text-sm text-white/50 leading-relaxed font-medium">
+              Deploy graph traversal algorithms to compile fragmented records into a unified identity matrix.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest pl-1">Email Address</label>
+          <form onSubmit={handleSubmit} className="space-y-7">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black text-cyan-400 uppercase tracking-widest pl-2">Primary Locator (Email)</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="w-5 h-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                  <Mail className="w-5 h-5 text-white/30 group-focus-within:text-cyan-400 transition-colors" />
                 </div>
                 <input
                   type="email"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-400 focus:bg-white transition-all placeholder:text-slate-400 font-semibold text-slate-800"
+                  className="w-full bg-[#151D30] border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:border-cyan-500/50 focus:ring-4 focus:ring-cyan-500/10 transition-all placeholder:text-white/20 font-bold text-white shadow-inner"
                   placeholder="mcfly@hillvalley.edu"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -130,15 +146,15 @@ function App() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest pl-1">Phone Number</label>
+            <div className="space-y-3">
+              <label className="text-[10px] font-black text-pink-400 uppercase tracking-widest pl-2">Secondary Locator (Phone)</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Phone className="w-5 h-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                  <Phone className="w-5 h-5 text-white/30 group-focus-within:text-pink-400 transition-colors" />
                 </div>
                 <input
                   type="text"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-400 focus:bg-white transition-all placeholder:text-slate-400 font-semibold text-slate-800"
+                  className="w-full bg-[#151D30] border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:border-pink-500/50 focus:ring-4 focus:ring-pink-500/10 transition-all placeholder:text-white/20 font-bold text-white shadow-inner"
                   placeholder="123456"
                   value={phoneNumber}
                   onChange={(e) => setPhone(e.target.value)}
@@ -149,14 +165,17 @@ function App() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full relative overflow-hidden bg-indigo-600 text-white rounded-2xl py-4 text-sm font-bold transition-all shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30 hover:-translate-y-0.5 disabled:opacity-70 disabled:hover:translate-y-0 group mt-6 flex justify-center cursor-pointer"
+              className="w-full relative overflow-hidden bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-2xl py-4 text-sm font-black tracking-wide transition-all shadow-[0_0_40px_-10px_rgba(236,72,153,0.5)] hover:shadow-[0_0_60px_-15px_rgba(236,72,153,0.7)] hover:-translate-y-1 disabled:opacity-50 disabled:hover:translate-y-0 group mt-8 flex justify-center cursor-pointer border border-pink-400/30"
             >
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-[0%] transition-transform duration-300 ease-out" />
               {loading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Compiling...</span>
+                </div>
               ) : (
                 <span className="flex items-center gap-2 relative z-10">
-                  Execute Graph Query <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <Zap className="w-4 h-4 text-pink-200" /> Execute Query
                 </span>
               )}
             </button>
@@ -164,122 +183,135 @@ function App() {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="mt-auto p-10 bg-slate-50/50 border-t border-slate-100">
-          <div className="flex items-center gap-3 text-slate-500 text-xs font-semibold">
-            <Shield className="w-4 h-4 text-emerald-500" />
-            <span>Connected to Bitespeed Production DB</span>
+        <div className="mt-auto p-10 bg-[#0B101E] border-t border-white/5">
+          <div className="flex items-center justify-center gap-3 text-white/40 text-xs font-bold tracking-wider uppercase">
+            <Shield className="w-4 h-4 text-emerald-400" />
+            <span>Secure Node Connection Active</span>
           </div>
         </div>
       </div>
 
-      {/* Right Content Canvas */}
-      <div className="flex-1 h-full bg-[#f8fafc] relative overflow-y-auto pattern-dots pattern-slate-200 pattern-bg-transparent pattern-size-4 pattern-opacity-40">
+      {/* Right Content Canvas - Colorful & Atmospheric */}
+      <div className="flex-1 h-full relative overflow-y-auto bg-[#050810]">
         
-        {/* Glow Effects */}
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-indigo-400/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-purple-400/20 rounded-full blur-[120px] pointer-events-none" />
+        {/* Deep Atmospheric Gradients */}
+        <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-600/20 rounded-full blur-[150px] pointer-events-none mix-blend-screen" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-cyan-600/10 rounded-full blur-[150px] pointer-events-none mix-blend-screen" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
 
         <div className="min-h-full flex flex-col items-center justify-center p-8 md:p-16 relative z-10 w-full">
           <AnimatePresence mode="wait">
             {!result ? (
               <motion.div
                 key="empty"
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="flex flex-col items-center justify-center text-center max-w-md my-auto"
+                exit={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+                className="flex flex-col items-center justify-center text-center max-w-lg my-auto"
               >
-                <div className="relative mb-8">
-                  <div className="absolute inset-0 bg-indigo-200 rounded-3xl blur-xl opacity-50 animate-pulse" />
-                  <div className="w-28 h-28 bg-white rounded-3xl shadow-xl flex items-center justify-center relative z-10 border border-slate-100">
-                    <Database className="w-12 h-12 text-indigo-500" />
+                <div className="relative mb-10 group">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500 to-purple-500 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 animate-pulse" />
+                  <div className="w-32 h-32 bg-[#12192A] rounded-full shadow-2xl flex items-center justify-center relative z-10 border border-white/10 group-hover:border-white/20 transition-colors">
+                    <Database className="w-14 h-14 text-white/50" />
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-800 mb-3 tracking-tight">Waiting for Query</h3>
-                <p className="text-slate-500 leading-relaxed font-medium">
-                  Enter an email or phone number in the panel to instantly retrieve or construct their consolidated identity graph.
+                <h3 className="text-3xl font-black text-white mb-4 tracking-tight">System Standby</h3>
+                <p className="text-white/40 leading-relaxed font-medium text-lg">
+                  Input parameters in the console to generate a unified topological view of the subject's identity.
                 </p>
               </motion.div>
             ) : (
               <motion.div
                 key="results"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, type: 'spring', bounce: 0.4 }}
-                className="w-full max-w-4xl py-12"
+                initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.6, type: 'spring', bounce: 0.3 }}
+                className="w-full max-w-5xl py-12"
               >
-                {/* Main Root Node */}
-                <div className="bg-white border border-slate-200 p-8 md:p-10 rounded-[2rem] shadow-2xl shadow-slate-200/50 relative z-20 w-full">
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+                {/* Main Root Node Dashboard */}
+                <div className="bg-[#111827]/80 backdrop-blur-2xl border border-white/10 p-8 md:p-12 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] relative z-20 w-full overflow-hidden">
+                  
+                  {/* Glowing top border */}
+                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50" />
+
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
                     <div>
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-black uppercase tracking-widest px-4 py-2 rounded-full flex items-center gap-2 shadow-[0_0_20px_-5px_rgba(16,185,129,0.3)]">
                           <CheckCircle2 className="w-4 h-4" />
-                          Root Identity
+                          Apex Identity Verified
                         </span>
-                        <span className="text-xs font-mono font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
-                          ID: {result.primaryContactId}
+                        <span className="text-xs font-mono font-bold text-white/40 bg-black/30 px-3 py-2 rounded-lg border border-white/5">
+                          UID // {result.primaryContactId}
                         </span>
                       </div>
-                      <h3 className="text-4xl font-black text-slate-900 tracking-tight">Unified Profile</h3>
+                      <h3 className="text-5xl font-black text-white tracking-tighter">Unified Matrix</h3>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-5 py-3 rounded-2xl shadow-sm text-sm font-bold text-slate-700 w-full md:w-auto">
-                      <LayoutGrid className="w-5 h-5 text-indigo-500" />
-                      {result.emails?.length + result.phoneNumbers?.length} Connected Data Points
+                    <div className="flex flex-col items-end gap-2">
+                        <div className="text-[10px] uppercase font-bold tracking-widest text-white/30">Total Data Nodes</div>
+                        <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl shadow-inner text-2xl font-black text-white w-full md:w-auto">
+                        <LayoutGrid className="w-6 h-6 text-purple-400" />
+                        {result.emails?.length + result.phoneNumbers?.length} 
+                        </div>
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-10">
+                  <div className="grid md:grid-cols-2 gap-12 bg-black/20 p-8 rounded-3xl border border-white/5">
                     <div>
-                      <h4 className="text-xs font-bold text-slate-400 tracking-widest uppercase mb-5 flex items-center gap-2 border-b border-slate-100 pb-3">
-                        <Mail className="w-4 h-4 text-slate-400" /> Known Emails
+                      <h4 className="text-xs font-black text-cyan-400 tracking-widest uppercase mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
+                        <Mail className="w-5 h-5 text-cyan-400" /> Registered Email Vectors
                       </h4>
-                      <PrimaryList items={result.emails} icon={Mail} title="Emails" />
+                      <PrimaryList items={result.emails} icon={Mail} title="Emails" colorClass="from-cyan-600 to-blue-600" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-slate-400 tracking-widest uppercase mb-5 flex items-center gap-2 border-b border-slate-100 pb-3">
-                        <Phone className="w-4 h-4 text-slate-400" /> Known Phones
+                      <h4 className="text-xs font-black text-pink-400 tracking-widest uppercase mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
+                        <Phone className="w-5 h-5 text-pink-400" /> Linked Telemetry
                       </h4>
-                      <PrimaryList items={result.phoneNumbers} icon={Phone} title="Phones" />
+                      <PrimaryList items={result.phoneNumbers} icon={Phone} title="Phones" colorClass="from-pink-600 to-orange-600" />
                     </div>
                   </div>
                 </div>
 
-                {/* Secondary Nodes Tree */}
+                {/* Secondary Nodes Visualizer */}
                 {result.secondaryContactIds && result.secondaryContactIds.length > 0 && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="relative mt-8 flex flex-col items-center w-full"
+                    transition={{ delay: 0.4 }}
+                    className="relative mt-12 flex flex-col items-center w-full"
                   >
-                    {/* Tree Connector Line */}
-                    <div className="w-1 h-16 bg-gradient-to-b from-indigo-200 to-slate-200 z-10 rounded-full" />
+                    {/* Glowing Tree Connector Line */}
+                    <div className="w-[2px] h-20 bg-gradient-to-b from-cyan-400/50 via-purple-500/50 to-transparent z-10" />
 
-                    <div className="bg-slate-800 text-white border border-slate-700 text-xs font-bold uppercase tracking-widest px-6 py-2.5 rounded-full shadow-lg z-20 flex items-center gap-2 -my-4">
-                      <Users className="w-4 h-4 text-indigo-400" />
-                      {result.secondaryContactIds.length} Linked Sub-Profiles
+                    <div className="bg-[#1A2235] text-white border border-purple-500/30 text-xs font-black uppercase tracking-widest px-8 py-4 rounded-full shadow-[0_0_30px_-5px_rgba(168,85,247,0.4)] z-20 flex items-center gap-3 -my-6 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10" />
+                      <Users className="w-5 h-5 text-purple-400 relative z-10" />
+                      <span className="relative z-10">{result.secondaryContactIds.length} Linked Sub-Nodes</span>
                     </div>
 
-                    <div className="w-1 h-12 bg-slate-200 z-10 -mb-6 rounded-full" />
+                    <div className="w-[2px] h-16 bg-gradient-to-b from-purple-500/30 to-white/5 z-10 -mb-8" />
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full mt-10 z-20">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full mt-12 z-20">
                       {result.secondaryContactIds.map((id, index) => (
                         <motion.div
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.4 + (index * 0.05), type: 'spring' }}
+                          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          transition={{ delay: 0.6 + (index * 0.1), type: 'spring', damping: 12 }}
                           key={id}
-                          className="bg-white border-2 border-slate-100 text-center p-5 rounded-3xl shadow-lg shadow-slate-200/40 relative group hover:border-indigo-400 transition-colors cursor-default"
+                          className="bg-[#111827]/60 backdrop-blur-xl border border-white/10 text-center p-6 rounded-3xl shadow-xl relative group hover:bg-[#1A2235] hover:border-purple-500/50 transition-all duration-300 cursor-default overflow-hidden"
                         >
-                          <div className="absolute -top-[7px] left-1/2 -translate-x-1/2 w-3 h-3 bg-slate-300 rounded-full group-hover:bg-indigo-500 transition-colors border-2 border-white" />
-                          <div className="text-[10px] flex flex-col items-center gap-1.5 text-slate-400 uppercase font-black tracking-widest mb-3">
-                            <LinkIcon className="w-4 h-4 text-slate-300 group-hover:text-indigo-400 transition-colors" />
-                            Linked ID
+                          {/* Hover flare */}
+                          <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/0 via-purple-500/0 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          
+                          <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,1)]" />
+                          
+                          <div className="text-[10px] flex flex-col items-center gap-2 text-white/40 uppercase font-black tracking-widest mb-4">
+                            <LinkIcon className="w-5 h-5 text-white/20 group-hover:text-purple-400 transition-colors" />
+                            Reference ID
                           </div>
-                          <div className="text-slate-800 font-black text-xl flex items-center justify-center">
-                            #{id}
+                          <div className="text-white font-black text-2xl flex items-center justify-center tracking-tighter">
+                            <span className="text-purple-500 mr-1">#</span>{id}
                           </div>
                         </motion.div>
                       ))}
