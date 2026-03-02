@@ -28,7 +28,8 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/identify', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/identify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -103,16 +104,16 @@ function App() {
 
       {/* Left Sidebar Form - Dark & Vibrant */}
       <div className="w-full lg:w-[480px] h-full flex flex-col border-r border-white/10 bg-[#0F1629] shrink-0 z-30 relative shadow-[20px_0_60px_-15px_rgba(0,0,0,0.5)] overflow-y-auto">
-        
+
         {/* Subtle top gradient */}
         <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500" />
 
         <div className="p-10 pb-6">
           <div className="flex items-center gap-4 mb-12">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 p-[2px] shadow-lg shadow-purple-500/30 animate-pulse">
-               <div className="w-full h-full bg-[#0F1629] rounded-2xl flex items-center justify-center">
-                  <Activity className="w-7 h-7 text-purple-400" />
-               </div>
+              <div className="w-full h-full bg-[#0F1629] rounded-2xl flex items-center justify-center">
+                <Activity className="w-7 h-7 text-purple-400" />
+              </div>
             </div>
             <div>
               <h1 className="font-black text-3xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 tracking-tight">FluxKart</h1>
@@ -170,8 +171,8 @@ function App() {
               <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-[0%] transition-transform duration-300 ease-out" />
               {loading ? (
                 <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Compiling...</span>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Compiling...</span>
                 </div>
               ) : (
                 <span className="flex items-center gap-2 relative z-10">
@@ -193,7 +194,7 @@ function App() {
 
       {/* Right Content Canvas - Colorful & Atmospheric */}
       <div className="flex-1 h-full relative overflow-y-auto bg-[#050810]">
-        
+
         {/* Deep Atmospheric Gradients */}
         <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-600/20 rounded-full blur-[150px] pointer-events-none mix-blend-screen" />
         <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-cyan-600/10 rounded-full blur-[150px] pointer-events-none mix-blend-screen" />
@@ -230,7 +231,7 @@ function App() {
               >
                 {/* Main Root Node Dashboard */}
                 <div className="bg-[#111827]/80 backdrop-blur-2xl border border-white/10 p-8 md:p-12 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] relative z-20 w-full overflow-hidden">
-                  
+
                   {/* Glowing top border */}
                   <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50" />
 
@@ -249,11 +250,11 @@ function App() {
                     </div>
 
                     <div className="flex flex-col items-end gap-2">
-                        <div className="text-[10px] uppercase font-bold tracking-widest text-white/30">Total Data Nodes</div>
-                        <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl shadow-inner text-2xl font-black text-white w-full md:w-auto">
+                      <div className="text-[10px] uppercase font-bold tracking-widest text-white/30">Total Data Nodes</div>
+                      <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl shadow-inner text-2xl font-black text-white w-full md:w-auto">
                         <LayoutGrid className="w-6 h-6 text-purple-400" />
-                        {result.emails?.length + result.phoneNumbers?.length} 
-                        </div>
+                        {result.emails?.length + result.phoneNumbers?.length}
+                      </div>
                     </div>
                   </div>
 
@@ -303,9 +304,9 @@ function App() {
                         >
                           {/* Hover flare */}
                           <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/0 via-purple-500/0 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          
+
                           <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,1)]" />
-                          
+
                           <div className="text-[10px] flex flex-col items-center gap-2 text-white/40 uppercase font-black tracking-widest mb-4">
                             <LinkIcon className="w-5 h-5 text-white/20 group-hover:text-purple-400 transition-colors" />
                             Reference ID
