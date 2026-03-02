@@ -28,8 +28,7 @@ function App() {
     setLoading(true);
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-      const response = await fetch(`${apiUrl}/identify`, {
+      const response = await fetch('http://localhost:3000/identify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
