@@ -116,7 +116,7 @@ function App() {
               </div>
             </div>
             <div>
-              <h1 className="font-black text-3xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 tracking-tight">FluxKart</h1>
+              <h1 className="font-black text-3xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 tracking-tight">BiteVC</h1>
               <p className="text-xs text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 font-black tracking-[0.2em] uppercase mt-1 flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-pink-400" /> Nexus Engine
               </p>
